@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="grid cols-4" id="alertStats">
+  <div class="card stat danger"><span class="label">Open</span><span class="value" id="aOpen">–</span></div>
+  <div class="card stat warn"><span class="label">Acknowledged</span><span class="value" id="aAck">–</span></div>
+  <div class="card stat ok"><span class="label">Resolved</span><span class="value" id="aRes">–</span></div>
+  <div class="card stat"><span class="label">Total alerts</span><span class="value" id="aTot">–</span></div>
+</section>
+<section class="card">
+  <div class="card-head"><h2>Intrusion Alerts</h2><span class="sub">Detection only. No traffic is blocked or modified.</span></div>
+  <form id="aFilters" class="toolbar">
+    <label class="field"><span>Search</span><input type="search" name="q" placeholder="IP, protocol, message"></label>
+    <label class="field"><span>Threat level</span><select name="threat_level"><option value="">All</option><option>Critical</option><option>High</option><option>Medium</option><option>Low</option></select></label>
+    <label class="field"><span>Status</span><select name="status"><option value="">All</option><option>Open</option><option>Acknowledged</option><option>Resolved</option></select></label>
+    <label class="field"><span>From</span><input type="date" name="date_from"></label>
+    <label class="field"><span>To</span><input type="date" name="date_to"></label>
+    <button class="btn" type="reset">Reset</button>
+  </form>
+  <div class="table-wrap"><table>
+    <thead><tr><th>ID</th><th>Detected</th><th>Source IP</th><th>Destination IP</th><th>Protocol</th><th>Model</th><th class="num">Confidence</th><th>Threat level</th><th>Status</th><th></th></tr></thead>
+    <tbody id="aBody"><tr><td colspan="10" class="empty-inline">Loading…</td></tr></tbody></table></div>
+  <div class="pager" id="aPager"></div>
+</section>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/alerts.js') }}"></script>{% endblock %}

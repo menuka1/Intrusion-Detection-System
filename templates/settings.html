@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="grid cols-2">
+  <div class="card">
+    <div class="card-head"><h2>Detection &amp; replay</h2></div>
+    <form id="setForm">
+      <label class="field"><span>Selected detection model</span><div id="setModel" class="sub">–</div><small>Change the active model on the <a href="/comparison">Model Comparison</a> page.</small></label>
+      <label class="field"><span>Default dataset (replay &amp; training)</span><select name="default_dataset_id" id="setDataset"><option value="">None</option></select></label>
+      <label class="field"><span>Default replay speed (records / second)</span><input type="number" name="replay_speed" min="1" max="200"></label>
+      <h3 style="margin:18px 0 10px;font-size:14px">Alert preferences</h3>
+      <label class="field"><span>Minimum probability to raise an alert</span><input type="number" step="0.01" min="0" max="1" name="alert_min_confidence"><small>Malicious predictions below this malicious-probability are still stored but raise no alert.</small></label>
+      <label class="field"><span>Dashboard refresh (seconds)</span><input type="number" min="2" max="120" name="dashboard_refresh_seconds"></label>
+      <h3 style="margin:18px 0 10px;font-size:14px">Severity rules <small class="sub">(independent of model confidence)</small></h3>
+      <label class="field"><span>Large transfer threshold (bytes)</span><input type="number" min="0" name="severity_size_threshold"></label>
+      <label class="field"><span>Small isolated flow below (bytes) → Low</span><input type="number" min="0" name="severity_small_size"></label>
+      <label class="field"><span>Repeated detections per source in 60 s → escalate</span><input type="number" min="1" name="severity_burst_count"></label>
+      <button class="btn btn-primary" type="submit" id="setSave" data-admin>Save settings</button>
+    </form>
+  </div>
+  <div class="card">
+    <div class="card-head"><h2>System &amp; application</h2></div>
+    <dl class="kv" id="setSys"></dl>
+    <p class="sub" style="margin-top:14px">Passwords, database credentials and the secret key are read from environment variables (<code>.env</code>) and are never displayed here.</p>
+  </div>
+</section>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/settings.js') }}"></script>{% endblock %}

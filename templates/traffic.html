@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="card">
+  <div class="card-head">
+    <h2>Traffic Replay <span class="badge warn">Simulation</span></h2>
+    <span class="sub" id="replayState">Idle</span>
+  </div>
+  <div class="note warn" style="margin-bottom:14px">Replay is a <strong>demonstration mode</strong>: recorded rows of a benchmark dataset are passed through the active model. It is not live network capture, and dataset labels are never given to the model.
+    Datasets without IP columns get <em>simulated</em> private addresses.</div>
+  <div class="replay-panel">
+    <label class="field"><span>Dataset</span><select id="rpDataset"></select></label>
+    <label class="field"><span>Speed (records / second)</span><input type="number" id="rpSpeed" min="1" max="200" value="5"></label>
+    <label class="field"><span>Max records (optional)</span><input type="number" id="rpMax" min="1" placeholder="all"></label>
+    <div class="field" style="flex-direction:row;gap:8px">
+      <button class="btn btn-ok" id="rpStart" data-admin>Start replay</button>
+      <button class="btn btn-danger" id="rpStop" data-admin>Stop</button>
+    </div>
+  </div>
+  <div class="progress" style="margin-top:14px"><i id="rpBar" style="width:0%"></i></div>
+  <div class="replay-stats" id="rpStats"></div>
+</section>
+
+<section class="card">
+  <div class="card-head"><h2>Analysed Network Traffic</h2><span class="sub" id="liveHint"></span></div>
+  <form id="filters" class="toolbar">
+    <label class="field"><span>Search</span><input type="search" name="q" placeholder="IP or protocol"></label>
+    <label class="field"><span>IP address</span><input type="text" name="ip" placeholder="exact IP"></label>
+    <label class="field"><span>Protocol</span><select name="protocol" id="fProtocol"><option value="">All</option></select></label>
+    <label class="field"><span>Status</span><select name="result"><option value="">All</option><option>Normal</option><option>Malicious</option></select></label>
+    <label class="field"><span>From</span><input type="date" name="date_from"></label>
+    <label class="field"><span>To</span><input type="date" name="date_to"></label>
+    <button class="btn" type="reset" id="fReset">Reset</button>
+  </form>
+  <div class="table-wrap">
+    <table>
+      <thead><tr>
+        <th class="sortable" data-sort="log_id">ID</th><th class="sortable" data-sort="timestamp">Timestamp</th>
+        <th class="sortable" data-sort="source_ip">Source IP</th><th class="sortable" data-sort="destination_ip">Destination IP</th>
+        <th class="sortable" data-sort="protocol">Protocol</th><th class="sortable num" data-sort="packet_size">Packet size</th>
+        <th class="sortable" data-sort="prediction">Prediction</th><th class="sortable num" data-sort="confidence">Confidence</th><th>Alert</th>
+      </tr></thead>
+      <tbody id="trafficBody"><tr><td colspan="9" class="empty-inline">Loading…</td></tr></tbody>
+    </table>
+  </div>
+  <div class="pager" id="pager"></div>
+</section>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/traffic.js') }}"></script>{% endblock %}

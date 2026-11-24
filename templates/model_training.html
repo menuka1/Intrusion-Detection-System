@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="grid cols-3" id="algoCards"><div class="card empty-inline">Loading models…</div></section>
+
+<section class="card">
+  <div class="card-head"><h2>Train a model</h2><span class="sub">Training runs in the background; progress below is reported by the job itself</span></div>
+  <form id="trainForm">
+    <div class="form-row">
+      <label class="field"><span>Dataset</span><select name="dataset_id" id="trDataset" required></select></label>
+      <label class="field"><span>Algorithm</span><select name="algorithm" id="trAlgo"></select></label>
+    </div>
+    <div id="dsHint" class="sub" style="margin:8px 0"></div>
+    <h3 style="margin:14px 0 10px;font-size:14px">Hyper-parameters</h3>
+    <div class="form-row" id="paramFields"></div>
+    <div style="margin-top:16px"><button class="btn btn-primary" type="submit" id="trainBtn" data-admin>Train model</button>
+      <span class="sub" style="margin-left:10px">Uses the preprocessing configuration saved for the dataset (or defaults).</span></div>
+  </form>
+</section>
+
+<section class="card">
+  <div class="card-head"><h2>Training jobs</h2><span class="sub" id="jobsHint"></span></div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Job</th><th>Algorithm</th><th>Dataset</th><th>Status</th><th style="min-width:180px">Progress</th><th>Started</th><th>Completed</th><th>Result</th></tr></thead>
+    <tbody id="jobsBody"><tr><td colspan="8" class="empty-inline">Loading…</td></tr></tbody></table></div>
+</section>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/models.js') }}"></script>{% endblock %}

@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="card">
+  <div class="card-head"><h2>1 · Select dataset</h2><span class="sub">Preprocessing is fitted on the training split only (no leakage)</span></div>
+  <div class="form-row">
+    <label class="field"><span>Dataset</span><select id="ppDataset"></select></label>
+    <label class="field"><span>Label (target) column</span><select id="ppLabel"></select></label>
+    <label class="field"><span>Official test dataset (optional)</span><select id="ppTest"><option value="">None - stratified split</option></select></label>
+  </div>
+  <div id="ppInfo" class="sub" style="margin-top:10px"></div>
+</section>
+
+<section class="grid cols-2-1">
+  <div class="card">
+    <div class="card-head"><h2>2 · Inspect columns</h2><span class="sub">Untick a column to exclude it from the features</span></div>
+    <div class="table-wrap col-list"><table>
+      <thead><tr><th>Use</th><th>Column</th><th>Kind</th><th class="num">Missing</th><th class="num">Unique</th></tr></thead>
+      <tbody id="ppCols"><tr><td colspan="5" class="empty-inline">Select a dataset.</td></tr></tbody></table></div>
+    <div id="ppQuality" style="margin-top:12px"></div>
+  </div>
+  <div class="card">
+    <div class="card-head"><h2>3 · Configure</h2></div>
+    <form id="ppForm">
+      <label class="field"><span>Numerical scaling</span>
+        <select name="scaling"><option value="standard">Standardisation (z-score)</option><option value="minmax">Min-max (0-1)</option><option value="none">None</option></select>
+        <small>Neural networks need scaling; trees do not.</small></label>
+      <label class="field"><span>Feature selection</span>
+        <select name="feature_selection"><option value="none">None (keep all)</option><option value="f_classif">ANOVA F-score</option><option value="mutual_info">Mutual information</option></select></label>
+      <label class="field"><span>Features to keep (k)</span><input type="number" name="k_features" min="1" placeholder="when selection is enabled"></label>
+      <label class="check field"><input type="checkbox" name="drop_duplicates" checked> Remove duplicate rows</label>
+      <div class="form-row">
+        <label class="field"><span>Test size</span><input type="number" step="0.05" min="0.05" max="0.5" name="test_size" value="0.2"></label>
+        <label class="field"><span>Validation size</span><input type="number" step="0.05" min="0.05" max="0.4" name="val_size" value="0.1"></label>
+      </div>
+      <label class="field" style="margin-top:12px"><span>Random seed</span><input type="number" name="seed" value="42"></label>
+      <p class="sub">Categorical features are one-hot encoded (rare categories grouped); missing values are imputed with training medians / modes.</p>
+      <button class="btn btn-primary btn-block" type="submit" id="ppRun" data-admin>Run preprocessing</button>
+    </form>
+  </div>
+</section>
+
+<section class="card">
+  <div class="card-head"><h2>4 · Before / after summary</h2><span id="ppStatus"></span></div>
+  <div id="ppSummary"><div class="empty-inline">Run preprocessing to see the summary.</div></div>
+</section>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/datasets.js') }}"></script>
+<script src="{{ url_for('static', filename='js/preprocessing.js') }}"></script>
+{% endblock %}

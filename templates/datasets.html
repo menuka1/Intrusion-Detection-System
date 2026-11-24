@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="card" id="uploadCard">
+  <div class="card-head"><h2>Upload dataset</h2><span class="sub">CSV or TXT · max <span id="maxMb">200</span> MB · NSL-KDD, UNSW-NB15 or custom</span></div>
+  <form id="uploadForm" class="form-row" enctype="multipart/form-data">
+    <label class="field"><span>File</span><input type="file" name="file" accept=".csv,.txt" required></label>
+    <label class="field"><span>Name</span><input type="text" name="dataset_name" maxlength="150" placeholder="defaults to file name"></label>
+    <label class="field"><span>Dataset type</span>
+      <select name="dataset_type"><option value="auto">Auto-detect</option><option value="nsl-kdd">NSL-KDD</option><option value="unsw-nb15">UNSW-NB15</option><option value="custom">Custom CSV</option></select></label>
+    <label class="field"><span>Label column (optional)</span><input type="text" name="label_column" placeholder="auto-detected"></label>
+    <button class="btn btn-primary" type="submit" id="uploadBtn" data-admin>Upload &amp; validate</button>
+  </form>
+  <div class="note" style="margin-top:14px">Need data to try the system offline? Register a bundled <strong>synthetic</strong> sample that mimics the column structure
+    (it is <em>not</em> real NSL-KDD / UNSW-NB15 data):
+    <button class="btn btn-sm" data-sample="nsl-kdd" data-admin>Load NSL-KDD-structure sample</button>
+    <button class="btn btn-sm" data-sample="unsw-nb15" data-admin>Load UNSW-NB15-structure sample</button></div>
+</section>
+
+<section class="card">
+  <div class="card-head"><h2>Datasets</h2><span class="sub" id="dsCount"></span></div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Name</th><th>Type</th><th class="num">Size</th><th class="num">Rows</th><th class="num">Columns</th><th>Label</th><th>Status</th><th>Uploaded</th><th></th></tr></thead>
+      <tbody id="dsBody"><tr><td colspan="9" class="empty-inline">Loading…</td></tr></tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/datasets.js') }}"></script>{% endblock %}

@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block content %}
+<div id="noModelNotice" class="note warn" hidden style="margin-bottom:18px">
+  No detection model is active yet. Upload a dataset, train models, then activate one on the
+  <a href="/comparison">Model Comparison</a> page. Statistics below show real stored data only.
+</div>
+
+<section class="grid cols-5" aria-label="Key statistics">
+  <div class="card stat"><span class="label">Total Traffic Records</span><span class="value" id="stTotal">–</span><span class="hint">analysed &amp; stored</span></div>
+  <div class="card stat ok"><span class="label">Normal Traffic</span><span class="value" id="stNormal">–</span><span class="hint" id="stNormalPct">&nbsp;</span></div>
+  <div class="card stat danger"><span class="label">Malicious Detected</span><span class="value" id="stMal">–</span><span class="hint" id="stMalPct">&nbsp;</span></div>
+  <div class="card stat warn"><span class="label">Active Intrusion Alerts</span><span class="value" id="stAlerts">–</span><span class="hint">status: Open</span></div>
+  <div class="card stat"><span class="label">Selected Model Accuracy</span><span class="value" id="stAcc">–</span><span class="hint" id="stAccHint">no active model</span></div>
+</section>
+
+<section class="grid cols-2-1" style="margin-top:20px">
+  <div class="card">
+    <div class="card-head"><h2>Network Traffic Activity</h2><span class="sub"><span class="live-dot"></span>Last 30 minutes · auto-refresh</span></div>
+    <div class="chart-box"><canvas id="chTimeline"></canvas></div>
+  </div>
+  <div class="card">
+    <div class="card-head"><h2>Normal vs Malicious</h2></div>
+    <div class="chart-box"><canvas id="chSplit"></canvas></div>
+  </div>
+</section>
+
+<section class="card">
+  <div class="card-head">
+    <h2>Live Traffic Monitor</h2>
+    <span class="sub" id="trafficHint">Latest analysed records · <a href="/traffic">open Traffic Monitoring</a></span>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Timestamp</th><th>Source IP</th><th>Destination IP</th><th>Protocol</th><th class="num">Packet size</th><th>Prediction</th><th class="num">Confidence</th><th>Threat status</th></tr></thead>
+      <tbody id="trafficBody"><tr><td colspan="8" class="empty-inline">Loading…</td></tr></tbody>
+    </table>
+  </div>
+</section>
+
+<section class="grid cols-3">
+  <div class="card"><div class="card-head"><h2>Intrusion Alert Distribution</h2></div><div class="chart-box"><canvas id="chAlertStatus"></canvas></div></div>
+  <div class="card"><div class="card-head"><h2>Protocol Distribution</h2></div><div class="chart-box"><canvas id="chProto"></canvas></div></div>
+  <div class="card"><div class="card-head"><h2>Threat Level Distribution</h2></div><div class="chart-box"><canvas id="chLevel"></canvas></div></div>
+</section>
+
+<section class="grid cols-2-1">
+  <div class="card">
+    <div class="card-head"><h2>Machine Learning Model Performance</h2><span class="sub">Held-out test set · malicious class</span></div>
+    <div class="chart-box"><canvas id="chModels"></canvas></div>
+  </div>
+  <div class="card">
+    <div class="card-head"><h2>System Status</h2></div>
+    <ul class="status-list" id="sysStatus"><li class="empty-inline">Loading…</li></ul>
+  </div>
+</section>
+
+<section class="card">
+  <div class="card-head"><h2>Recent Alerts</h2><a href="/alerts" class="sub">View all alerts →</a></div>
+  <ul class="alert-feed" id="recentAlerts"><li class="empty-inline" style="border:0">Loading…</li></ul>
+</section>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>{% endblock %}

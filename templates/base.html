@@ -1,0 +1,68 @@
+{% from '_icons.html' import icon %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="csrf-token" content="{{ csrf }}">
+  <title>{% block title %}{{ page_title }}{% endblock %} · ML-IDS</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232563EB' stroke-width='2'%3E%3Cpath d='M12 3l8 3v6c0 4.5-3.2 8.2-8 9-4.8-.8-8-4.5-8-9V6z'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+  {% block head %}{% endblock %}
+</head>
+<body class="app" data-role="{{ user.role if user else '' }}" data-user="{{ user.username if user else '' }}">
+{% set nav_items = [
+  ('index', '/', 'dashboard', 'Dashboard'),
+  ('traffic', '/traffic', 'traffic', 'Traffic Monitoring'),
+  ('datasets', '/datasets', 'database', 'Datasets'),
+  ('preprocessing', '/preprocessing', 'sliders', 'Preprocessing'),
+  ('training', '/training', 'cpu', 'Model Training'),
+  ('comparison', '/comparison', 'compare', 'Model Comparison'),
+  ('alerts', '/alerts', 'bell', 'Intrusion Alerts'),
+  ('reports', '/reports', 'report', 'Reports'),
+  ('settings', '/settings', 'settings', 'Settings')] %}
+<div class="shell">
+  <aside class="sidebar" id="sidebar" aria-label="Main navigation">
+    <a class="brand" href="/">
+      <span class="brand-mark">{{ icon('shield', 22) }}</span>
+      <span><strong>ML-IDS</strong><small>Intrusion Detection</small></span>
+    </a>
+    <nav>
+      {% for key, href, ico, label in nav_items %}
+      <a href="{{ href }}" class="nav-link {{ 'active' if nav == (key if key != 'index' else 'dashboard') else '' }}">
+        {{ icon(ico) }}<span>{{ label }}</span>
+        {% if key == 'alerts' %}<span class="nav-badge" id="navAlertBadge" hidden></span>{% endif %}
+      </a>
+      {% endfor %}
+    </nav>
+    <div class="sidebar-foot">
+      <a href="/profile" class="nav-link {{ 'active' if nav == 'profile' else '' }}">{{ icon('user') }}<span>{{ user.username if user else 'Profile' }}</span></a>
+      <button type="button" class="nav-link nav-btn" id="logoutBtn">{{ icon('logout') }}<span>Log out</span></button>
+    </div>
+  </aside>
+  <div class="scrim" id="scrim"></div>
+  <div class="main">
+    <header class="topbar">
+      <button type="button" class="icon-btn menu-btn" id="menuBtn" aria-label="Open menu">{{ icon('menu', 22) }}</button>
+      <h1>{{ page_title }}</h1>
+      <div class="topbar-right">
+        <span class="pill" id="pillDb" title="Database connection"><i class="dot"></i>DB</span>
+        <span class="pill" id="pillModel" title="Active detection model"><i class="dot"></i>Model</span>
+        <span class="pill pill-sim" id="pillReplay" hidden title="Traffic replay is a simulation using recorded dataset rows"><i class="dot"></i>Replay (simulated)</span>
+        <a class="user-chip" href="/profile">{{ icon('user', 16) }} {{ user.username if user else '' }} <small>{{ user.role if user else '' }}</small></a>
+      </div>
+    </header>
+    <main class="content">
+      {% block content %}{% endblock %}
+    </main>
+    <footer class="foot">ML-IDS · Detection only: no traffic is blocked or modified. Replay mode uses recorded benchmark data, not live capture.</footer>
+  </div>
+</div>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="{{ url_for('static', filename='js/common.js') }}"></script>
+<script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

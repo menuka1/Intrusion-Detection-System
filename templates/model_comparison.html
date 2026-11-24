@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="card">
+  <div class="toolbar">
+    <label class="field"><span>Dataset</span><select id="cmpDataset"></select></label>
+    <label class="field"><span>Highlight best by</span>
+      <select id="cmpMetric"><option value="f1_score">F1-Score (malicious class, default)</option><option value="accuracy">Accuracy</option><option value="precision">Precision</option><option value="recall">Recall</option><option value="fpr">False positive rate (lowest)</option><option value="fnr">False negative rate (lowest)</option></select></label>
+  </div>
+  <div id="cmpNote" class="note"></div>
+  <div id="cmpDatasetInfo" class="sub" style="margin-top:10px"></div>
+</section>
+
+<section class="card">
+  <div class="card-head"><h2>Metric comparison</h2><span class="sub">Held-out test split · same split for every model</span></div>
+  <div id="cmpTable"><div class="empty-inline">Loading…</div></div>
+</section>
+
+<section class="grid cols-2">
+  <div class="card"><div class="card-head"><h2>Performance chart</h2></div><div class="chart-box tall"><canvas id="chCmp"></canvas></div></div>
+  <div class="card"><div class="card-head"><h2>Error rates &amp; durations</h2></div><div class="chart-box tall"><canvas id="chErr"></canvas></div></div>
+</section>
+
+<section class="card">
+  <div class="card-head"><h2>Confusion matrices</h2><span class="sub">rows: actual · columns: predicted</span></div>
+  <div class="grid cols-3" id="cmpCm"></div>
+</section>
+
+<section class="card">
+  <div class="card-head"><h2>Model selection for detection</h2><span class="sub">The active model and its own preprocessing pipeline are used by the detection engine</span></div>
+  <div id="cmpSelect"></div>
+</section>
+
+<section class="card">
+  <div class="card-head"><h2>All versions on this dataset</h2></div>
+  <div class="table-wrap"><table><thead><tr><th>ID</th><th>Algorithm</th><th>Version</th><th class="num">Accuracy</th><th class="num">F1</th><th>Trained</th><th>Status</th><th></th></tr></thead><tbody id="cmpVersions"></tbody></table></div>
+</section>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/models.js') }}"></script>{% endblock %}

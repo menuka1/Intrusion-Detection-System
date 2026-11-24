@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="card no-print">
+  <div class="card-head"><h2>Generate report</h2><span class="sub">Built from stored detections, alerts and evaluation results</span></div>
+  <div class="tabs" id="rTabs"></div>
+  <form id="rFilters" class="toolbar">
+    <label class="field"><span>From</span><input type="date" name="date_from"></label>
+    <label class="field"><span>To</span><input type="date" name="date_to"></label>
+    <label class="field" data-for="traffic,ml_performance,dataset_analysis"><span>Dataset</span><select name="dataset_id" id="rDataset"><option value="">All</option></select></label>
+    <label class="field" data-for="traffic,intrusion,alert_history"><span>Model name</span>
+      <select name="model"><option value="">All</option><option>Decision Tree</option><option>Random Forest</option><option>Artificial Neural Network</option></select></label>
+    <label class="field" data-for="ml_performance"><span>Algorithm</span><select name="algorithm"><option value="">All</option><option value="decision_tree">Decision Tree</option><option value="random_forest">Random Forest</option><option value="ann">ANN</option></select></label>
+    <label class="field" data-for="alert_history"><span>Alert status</span><select name="status"><option value="">All</option><option>Open</option><option>Acknowledged</option><option>Resolved</option></select></label>
+    <button class="btn btn-primary" type="submit">Generate</button>
+    <button class="btn" type="button" id="rCsv">Export CSV</button>
+    <button class="btn" type="button" id="rPrint">Print / Save as PDF</button>
+  </form>
+</section>
+<section class="card" id="rOut"><div class="empty-inline">Choose a report type and press Generate.</div></section>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/reports.js') }}"></script>{% endblock %}

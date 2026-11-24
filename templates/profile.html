@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="grid cols-2">
+  <div class="card">
+    <div class="card-head"><h2>Your profile</h2></div>
+    <dl class="kv">
+      <dt>Username</dt><dd>{{ user.username }}</dd><dt>Email</dt><dd>{{ user.email }}</dd>
+      <dt>Role</dt><dd><span class="badge info">{{ user.role }}</span></dd>
+      <dt>Member since</dt><dd data-time="{{ user.created_at }}">{{ user.created_at }}</dd>
+      <dt>Last sign-in</dt><dd data-time="{{ user.last_login_at or '' }}">{{ user.last_login_at or '–' }}</dd>
+    </dl>
+  </div>
+  <div class="card">
+    <div class="card-head"><h2>Change password</h2></div>
+    <form id="pwForm" autocomplete="off">
+      <div class="alert-box alert-danger" id="pwErr" hidden></div>
+      <label class="field"><span>Current password</span><input type="password" name="current_password" autocomplete="current-password" required></label>
+      <label class="field"><span>New password</span><input type="password" name="new_password" autocomplete="new-password" minlength="10" required><small>At least 10 characters with letters and digits.</small></label>
+      <label class="field"><span>Confirm new password</span><input type="password" name="confirm" autocomplete="new-password" required></label>
+      <button class="btn btn-primary" type="submit">Update password</button>
+    </form>
+  </div>
+</section>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/settings.js') }}"></script>{% endblock %}

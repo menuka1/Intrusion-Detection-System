@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+<div id="datasetDetail" data-id="{{ dataset_id }}">
+  <div class="toolbar no-print"><a class="btn" href="/datasets">← All datasets</a>
+    <a class="btn btn-primary" id="goPrep" href="/preprocessing?dataset={{ dataset_id }}">Preprocess this dataset</a></div>
+  <div id="detailError" class="alert-box alert-danger" hidden></div>
+  <section class="card"><div class="card-head"><h2 id="dName">Dataset</h2><span id="dStatus"></span></div><dl class="kv" id="dMeta"></dl></section>
+  <section class="grid cols-2">
+    <div class="card"><div class="card-head"><h2>Traffic class distribution</h2><span class="sub">from the label column</span></div><div class="chart-box"><canvas id="chClass"></canvas></div></div>
+    <div class="card"><div class="card-head"><h2>Data quality</h2></div><dl class="kv" id="dQuality"></dl><div id="dWarnings"></div></div>
+  </section>
+  <section class="card"><div class="card-head"><h2>Features</h2><span class="sub" id="dFeatCount"></span></div>
+    <div class="table-wrap col-list"><table><thead><tr><th>Column</th><th>Kind</th><th>Type</th><th class="num">Missing</th><th class="num">Unique</th></tr></thead><tbody id="dCols"></tbody></table></div></section>
+  <section class="card"><div class="card-head"><h2>Preprocessing results</h2></div><div id="dPrep"></div></section>
+  <section class="card"><div class="card-head"><h2>Preview</h2><span class="sub">first 20 records</span></div><div class="table-wrap col-list"><table id="dPreview"></table></div></section>
+</div>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/datasets.js') }}"></script>{% endblock %}

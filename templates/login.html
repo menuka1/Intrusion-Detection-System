@@ -1,0 +1,35 @@
+{% from '_icons.html' import icon %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="csrf-token" content="{{ csrf }}">
+  <title>Sign in · ML-IDS</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232563EB' stroke-width='2'%3E%3Cpath d='M12 3l8 3v6c0 4.5-3.2 8.2-8 9-4.8-.8-8-4.5-8-9V6z'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="login-body">
+  <main class="login-card">
+    <div class="login-brand">
+      <span class="brand-mark big">{{ icon('shield', 30) }}</span>
+      <h1>ML-IDS</h1>
+      <p>Machine Learning Based Intrusion Detection System</p>
+    </div>
+    <form id="loginForm" novalidate autocomplete="on">
+      <div class="alert-box alert-danger" id="loginError" role="alert" hidden></div>
+      {% if no_users %}
+      <div class="alert-box alert-warn">No user exists yet. Create the administrator from the server console:
+        <code>python app.py init-admin</code></div>
+      {% endif %}
+      <label class="field"><span>Username or email</span>
+        <input type="text" name="login" id="login" autocomplete="username" required autofocus></label>
+      <label class="field"><span>Password</span>
+        <input type="password" name="password" id="password" autocomplete="current-password" required></label>
+      <button class="btn btn-primary btn-block" type="submit" id="loginBtn">Sign in</button>
+    </form>
+    <p class="login-note">Authorised network administrators only. Activity is logged.</p>
+  </main>
+  <script src="{{ url_for('static', filename='js/login.js') }}"></script>
+</body>
+</html>
